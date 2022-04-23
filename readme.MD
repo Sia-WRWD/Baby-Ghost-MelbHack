@@ -1,4 +1,4 @@
-# Baby Ghost
+# BabyGhost
 <img src="https://github.com/Sia-WRWD/Baby-Ghost-MelbHack/blob/main/assets/hungry.png" alt="avatar.png">
 
 ## Who Am I?
