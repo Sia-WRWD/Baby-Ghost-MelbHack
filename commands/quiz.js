@@ -93,7 +93,7 @@ module.exports = {
             .setImage("https://c.tenor.com/JfFIxtoErUkAAAAM/frye-stare.gif")
             .setFooter({ text: `${type} quiz`, iconURL: 'https://c.tenor.com/JfFIxtoErUkAAAAM/frye-stare.gif' });
 
-        console.log(correctAnswer);
+        // console.log(correctAnswer);
 
         const filter = response => {
             return correctAnswer.toLowerCase() == response.content.toLowerCase();
@@ -101,7 +101,7 @@ module.exports = {
 
         interaction.reply({ embeds: [resEmbed] }, { fetchReply: true })
             .then(() => {
-                interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time'] })
+                interaction.channel.awaitMessages({ filter, max: 1, time: 10000, errors: ['time'] })
                     .then(collected => {
                         interaction.followUp(`${collected.first().author} got the correct answer!`);
                     })
