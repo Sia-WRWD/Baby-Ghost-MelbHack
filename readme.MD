@@ -5,7 +5,7 @@
 Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost" (do check me out!). Instead of helping Miss Shachiku, I am here to provide you with educational contents, stress-relieving memes, funny jokes and inspirational quotes to perk you up when you are down on energy!
 
 ## How to Get Me into Your Server?
-Just click on this link:
+Just click on this link and select your server:
 https://discord.com/api/oauth2/authorize?client_id=967061506002935838&permissions=8&scope=bot%20applications.commands
 
 ## Commands (Starts with a "/"):
