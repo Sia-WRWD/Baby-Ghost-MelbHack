@@ -2,7 +2,7 @@
 <img src="https://github.com/Sia-WRWD/Baby-Ghost-MelbHack/blob/main/hungry.png" alt="avatar.png">
 
 ## Who Am I?
-Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost" (do check it out!). Instead of helping Miss Shachiku, I am here to provide you with stress-relieving memes, funny jokes and inspirational quotes to perk you up when you are down on energy!
+Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost" (do check me out!). Instead of helping Miss Shachiku, I am here to provide you with stress-relieving memes, funny jokes and inspirational quotes to perk you up when you are down on energy!
 
 ## Reference Materials:
 1. https://github.com/rocktimsaikia/anime-chan
