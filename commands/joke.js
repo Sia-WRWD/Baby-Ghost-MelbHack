@@ -5,7 +5,7 @@ var joke = '';
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('joke')
+		.setName('joke')	
 		.setDescription('Replies with a joke!'),
 	// .addStringOption(option =>
 	// 	option.setName('type')

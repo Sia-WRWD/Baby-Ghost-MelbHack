@@ -1,149 +1,114 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
-const http = require('https');
-
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
+const fetch = require('node-fetch');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName("quiz")
-        .setDescription("Retrieve a quiz!"),
+        .setName('quiz')
+        .setDescription('Replies with a quiz!')
+        .addStringOption(option =>
+            option.setName('type')
+                .setDescription('The type of quiz')
+                .setRequired(true)
+                .addChoice("History", "history")
+                .addChoice("Geography", "geography")
+                .addChoice("Computer Science", "computer science")
+                .addChoice("Mathematics", "mathematics")
+                .addChoice("Movies", "movies")
+                .addChoice("Books", "books")
+                .addChoice("Music", "music"))
+        .addStringOption(option =>
+            option.setName('difficulty')
+                .setDescription('Difficulty of the quiz')
+                .setRequired(true)
+                .addChoice('Easy', 'easy')
+                .addChoice('Medium', 'medium')
+                .addChoice('Hard', 'hard')),
+    async run({ client, interaction }) {
 
-    run: async ({ client, interaction }) => {
+        var type = interaction.options.getString('type');
+        const difficulty = interaction.options.getString('difficulty');
+        var category = '';
 
-        const aButton = new MessageButton().setCustomId('a-button').setLabel('a.').setStyle('PRIMARY');
-        const bButton = new MessageButton().setCustomId('b-button').setLabel('b.').setStyle('PRIMARY');
-        const cButton = new MessageButton().setCustomId('c-button').setLabel('c.').setStyle('PRIMARY');
-        const dButton = new MessageButton().setCustomId('d-button').setLabel('d.').setStyle('PRIMARY');
-        const nextButton = new MessageButton().setCustomId('next-button').setLabel('Next').setStyle('SUCCESS');
+        switch (type) {
+            case 'history':
+                category = 23;
+                break;
+            case 'geography':
+                category = 22;
+                break;
+            case 'computer science':
+                category = 18;
+                break;
+            case 'mathematics':
+                category = 19;
+                break;
+            case 'movies':
+                category = 11;
+                break;
+            case 'books':
+                category = 10;
+                break;
+            case 'music':
+                category = 12;
+                break;
+        }
 
-        const row = new MessageActionRow()
-            .addComponents(aButton)
-            .addComponents(bButton)
-            .addComponents(cButton)
-            .addComponents(dButton)
-            .addComponents(nextButton.setDisabled(true))
-            ;
+        var url = `https://opentdb.com/api.php?amount=1&category=${category}&difficulty=${difficulty}&type=multiple`;
+        const response = await fetch(url);
+        const data = await response.json();
 
-        const embed = new MessageEmbed()
-        var url = "https://opentdb.com/api.php?amount=1&category=9&difficulty=easy&type=multiple";
-        var quizObject = '';
-        var botMessage = ';'
-        var answerState = false;
-        http.get(url, async res => {
-            let data = '';
-            res.on('data', async chunk => {
-                data += chunk;
-            });
-            res.on('end', async () => {
-                data = JSON.parse(data);
-                quizObject = Object.values(data.results);
+        var incorrectAnswers = data.results[0].incorrect_answers;
+        var correctAnswer = data.results[0].correct_answer;
+        var startingIndex = Math.floor(Math.random() * 3);
+        var answers = [];
 
-                var i = 0;
+        incorrectAnswers.forEach(option => {
+            answers.push(option);
+        })
 
-                // while (i <= quizObject.length) {
+        answers.splice(startingIndex, 0, correctAnswer);
 
-                const answerOptions = [
-                    quizObject[i].correct_answer,
-                    quizObject[i].incorrect_answers[0],
-                    quizObject[i].incorrect_answers[1],
-                    quizObject[i].incorrect_answers[2]
-                ];
+        function convert(string) {
+            return string.replace(/&#(?:x([\da-f]+)|(\d+));/ig, function (_, hex, dec) {
+                return String.fromCharCode(dec || +('0x' + hex))
+            })
+        }
 
-                const randomizedAnswer = answerOptions
-                    .map(value => ({ value, sort: Math.random() }))
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(({ value }) => value)
-
-                function convert(string) {
-                    return string.replace(/&#(?:x([\da-f]+)|(\d+));/ig, function (_, hex, dec) {
-                        return String.fromCharCode(dec || +('0x' + hex))
-                    })
+        var resEmbed = new MessageEmbed()
+            .setTitle(`${type} quiz`)
+            .setURL("https://opentdb.com/api_config.php")
+            .addFields(
+                {
+                    name: convert(`${data.results[0].question} You have 20 seconds to answer, copy and paste the correct answer!`),
+                    value: convert(
+                        `
+                            [a] ${answers[0]}
+                            [b] ${answers[1]}
+                            [c] ${answers[2]}
+                            [d] ${answers[3]}
+                        `)
                 }
+            )
+            .setImage("https://c.tenor.com/JfFIxtoErUkAAAAM/frye-stare.gif")
+            .setFooter({ text: `${type} quiz`, iconURL: 'https://c.tenor.com/JfFIxtoErUkAAAAM/frye-stare.gif' });
 
-                // console.log(answerOptions)
-                // console.log(randomizedAnswer)
+        console.log(correctAnswer);
 
-                embed.setColor('#0099ff')
-                    .setTitle(convert(quizObject[i].question))
-                    .setDescription(convert(`
-                        **[a.]** ${randomizedAnswer[0]}\n
-                        **[b.]** ${randomizedAnswer[1]}\n
-                        **[c.]** ${randomizedAnswer[2]}\n
-                        **[d.]** ${randomizedAnswer[3]}
-                        `));
-                await interaction.editReply({ content: `Question ${quizObject.length}`, ephemeral: true, embeds: [embed], components: [row] });
+        const filter = response => {
+            return correctAnswer.toLowerCase() == response.content.toLowerCase();
+        };
 
-                await client.on("interactionCreate", async (interaction2) => {
-                    const aDisButton = new MessageButton().setCustomId('a-button').setLabel('a.').setStyle('PRIMARY');
-                    const bDisButton = new MessageButton().setCustomId('b-button').setLabel('b.').setStyle('PRIMARY');
-                    const cDisButton = new MessageButton().setCustomId('c-button').setLabel('c.').setStyle('PRIMARY');
-                    const dDisButton = new MessageButton().setCustomId('d-button').setLabel('d.').setStyle('PRIMARY');
-                    const nextDisButton = new MessageButton().setCustomId('next-button').setLabel('Next').setStyle('SUCCESS');
-
-                    const disabledRow = new MessageActionRow()
-                        .addComponents(aButton.setDisabled(true))
-                        .addComponents(bButton.setDisabled(true))
-                        .addComponents(cButton.setDisabled(true))
-                        .addComponents(dButton.setDisabled(true))
-                        .addComponents(nextButton.setDisabled(false))
-                        ;
-
-                    console.log("Hello")
-                    console.log(interaction2.customId);
-
-                    if (interaction2.isButton()) {
-                        console.log(answerOptions[0]);
-                        switch (interaction2.customId) {
-                            case "a-button":
-
-                                if (randomizedAnswer[0] === answerOptions[0]) {
-                                    answerState = true
-                                    await interaction.channel.send({ content: `Correct Answer`, ephemeral: true, embeds: [embed], components: [row] });
-                                    await interaction.deleteReply()
-                                }
-                                break;
-                            case "b-button":
-
-                                if (randomizedAnswer[1] === answerOptions[0]) {
-                                    answerState = true
-                                    await interaction.channel.send({ content: `Correct Answer`, ephemeral: true, embeds: [embed], components: [row] });
-                                    await interaction.deleteReply()
-
-                                }
-                                break;
-                            case "c-button":
-
-                                if (randomizedAnswer[2] === answerOptions[0]) {
-                                    answerState = true
-                                    await interaction.channel.send({ content: `Correct Answer`, ephemeral: true, embeds: [embed], components: [row] });
-                                    await interaction.deleteReply()
-
-                                }
-                                break;
-                            case "d-button":
-                                if (randomizedAnswer[3] === answerOptions[0]) {
-                                    answerState = true
-                                    await interaction.channel.send({ content: `Correct Answer`, ephemeral: true, embeds: [embed], components: [row] });
-                                    await interaction.deleteReply()
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                })
-                // await interaction.channel.send({ content: `Question ${quizObject.length}`, ephemeral: true, embeds: [embed], components: [row] });
-
-            });
-        }).on('error', err => {
-            console.log(err.message);
-        });
-
-
-
+        interaction.reply({ embeds: [resEmbed] }, { fetchReply: true })
+            .then(() => {
+                interaction.channel.awaitMessages({ filter, max: 1, time: 20000, errors: ['time'] })
+                    .then(collected => {
+                        interaction.followUp(`${collected.first().author} got the correct answer!`);
+                    })
+                    .catch(collected => {
+                        interaction.followUp(`Sadge, you ran out of time! The correct answer is ${correctAnswer}`);
+                    })
+            })
 
     },
-};
-
-
-
+}

@@ -98,7 +98,7 @@ module.exports = {
                             .setImage("https://c.tenor.com/i_K3zWsgcG8AAAAi/hacker-pepe.gif")
                             .setFooter({ text: 'Programming Quotes', iconURL: 'https://c.tenor.com/i_K3zWsgcG8AAAAi/hacker-pepe.gif' });
 
-                        interaction.channel.send({ embeds: [resEmbed] });
+                        interaction.send({ embeds: [resEmbed] });
                     });
                 }).on('error', err => {
                     console.log(err.message);

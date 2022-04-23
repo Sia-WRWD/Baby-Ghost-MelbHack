@@ -7,6 +7,7 @@ const token = process.env.token;
 const client = new Client({
 	intents: [
 		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
 		Intents.FLAGS.GUILD_VOICE_STATES
 	]
 });
@@ -35,6 +36,7 @@ client.on('interactionCreate', async interaction => {
         if (!command) return;
 
         try {
+            // await interaction.deferReply();
             await command.run({ client, interaction });
         } catch (error) {
             console.error(error);
