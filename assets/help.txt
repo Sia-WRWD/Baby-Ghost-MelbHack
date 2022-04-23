@@ -1,0 +1,5 @@
+joke - replies with a joke.
+meme - replies with a meme.
+quote - replies with a quote.
+word - replies with a word.
+quiz - replies with a quiz.

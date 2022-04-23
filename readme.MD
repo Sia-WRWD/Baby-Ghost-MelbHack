@@ -1,8 +1,16 @@
 # Baby Ghost
-<img src="https://github.com/Sia-WRWD/Baby-Ghost-MelbHack/blob/main/hungry.png" alt="avatar.png">
+<img src="https://github.com/Sia-WRWD/Baby-Ghost-MelbHack/blob/main/assets/hungry.png" alt="avatar.png">
 
 ## Who Am I?
-Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost" (do check me out!). Instead of helping Miss Shachiku, I am here to provide you with stress-relieving memes, funny jokes and inspirational quotes to perk you up when you are down on energy!
+Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost" (do check me out!). Instead of helping Miss Shachiku, I am here to provide you with educational contents, stress-relieving memes, funny jokes and inspirational quotes to perk you up when you are down on energy!
+
+## Commands (Starts with a "/"):
+- help (replies with the full list of commands.)
+- joke (replies with a joke.)
+- meme (replies with a meme.)
+- quote (replies with a quote.)
+- word (replies with a word.)
+- quiz (replies with a quiz.)
 
 ## Reference Materials:
 1. https://github.com/rocktimsaikia/anime-chan
@@ -10,3 +18,4 @@ Halo! I am a character from the anime, "Miss Shachiku and the little baby ghost"
 3. https://github.com/bmumz/inspirational-quotes-api
 4. https://github.com/D3vd/Meme_Api
 5. https://github.com/jkbkupczyk/jokes-api
+6. https://github.com/mcnaveen/Random-Words-API
