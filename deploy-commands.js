@@ -21,8 +21,8 @@ const rest = new REST({ version: '9' }).setToken(token);
 		console.log('Started refreshing application (/) commands.');
 
 		await rest.put(
-			//Routes.applicationCommands(clientId)
-			Routes.applicationGuildCommands(clientId, guildId),
+			Routes.applicationCommands(clientId),
+			// Routes.applicationGuildCommands(clientId, guildId),
 			{ body: commands },
 		);
 
